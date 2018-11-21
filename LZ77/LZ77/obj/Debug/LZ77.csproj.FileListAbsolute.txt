@@ -1,0 +1,10 @@
+C:\Users\oski0\Desktop\TIIK\LZ77\LZ77\bin\Debug\LZ77.exe.config
+C:\Users\oski0\Desktop\TIIK\LZ77\LZ77\bin\Debug\LZ77.exe
+C:\Users\oski0\Desktop\TIIK\LZ77\LZ77\bin\Debug\LZ77.pdb
+C:\Users\oski0\Desktop\TIIK\LZ77\LZ77\obj\Debug\LZ77.csprojResolveAssemblyReference.cache
+C:\Users\oski0\Desktop\TIIK\LZ77\LZ77\obj\Debug\LZ77.Form1.resources
+C:\Users\oski0\Desktop\TIIK\LZ77\LZ77\obj\Debug\LZ77.Properties.Resources.resources
+C:\Users\oski0\Desktop\TIIK\LZ77\LZ77\obj\Debug\LZ77.csproj.GenerateResource.Cache
+C:\Users\oski0\Desktop\TIIK\LZ77\LZ77\obj\Debug\LZ77.csproj.CoreCompileInputs.cache
+C:\Users\oski0\Desktop\TIIK\LZ77\LZ77\obj\Debug\LZ77.exe
+C:\Users\oski0\Desktop\TIIK\LZ77\LZ77\obj\Debug\LZ77.pdb
