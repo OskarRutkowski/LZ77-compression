@@ -13,7 +13,11 @@ namespace LZ77
 {
     public partial class Form1 : Form
     {
+        List<Pair> reader_list = new List<Pair>();
+        OpenFileDialog ofd;
+
         byte[] inputFile; //tablica bajtów z plikiem wejściowym
+        string inputText = "";
         int inputSize = 0; // wielkość tablicy bajtów z plikiem wejściowym
         string inputExt = ""; // rozszerzenie pliku wejściowego
         Dictionary<char, double> dictionary; // słownik używany przy liczeniu entropii
@@ -79,16 +83,18 @@ namespace LZ77
         private void button1_Click(object sender, EventArgs e)
         {
             byte[] buffer; //bufor do wczytania pliku z OFD
-            OpenFileDialog ofd = new OpenFileDialog();
+            ofd = new OpenFileDialog();
             if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 buffer = File.ReadAllBytes(ofd.FileName);
+                inputText = File.ReadAllText(ofd.FileName);
                 inputFile = buffer;
                 inputSize = buffer.Length;
                 inputExt = Path.GetExtension(ofd.FileName);
                 string str = System.Text.Encoding.Default.GetString(buffer);
                 dictionary = makeDictionary(str);
 
+               
                 //pierwsza zakładka
                 label1.Text = ofd.SafeFileName;
                 label5.Text = inputSize.ToString();
@@ -123,25 +129,34 @@ namespace LZ77
         }
         private void compress_Click(object sender, EventArgs e)
         {
-            byte[] compressed;
+            List<Pair> compressed;
             LZ77 lz = new LZ77();
-            compressed = lz.Compress(inputFile, Int32.Parse(comboBox1.Text));
 
+            char[] textChar = inputText.ToCharArray();
+
+            compressed = lz.Compress(inputText.ToCharArray(), Int32.Parse(comboBox1.Text));
+
+            Console.WriteLine(compressed.Count);
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.Filter = "lz77 files (*.lz77)|*.lz77";
             if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 try
                 {
-                    using (var fs = new FileStream(sfd.FileName, FileMode.Create, FileAccess.Write))
-                    {
-                        bgw.DoWork += new DoWorkEventHandler(bgw_DoWork);
-                        bgw.ProgressChanged += new ProgressChangedEventHandler(bgw_ProgressChanged);
-                        bgw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bgw_RunWorkerCompleted);
-                        bgw.WorkerReportsProgress = true;
-                        bgw.RunWorkerAsync();
-                        fs.Write(compressed, 0, compressed.Length);
+
+                    using (BinaryWriter writer = new BinaryWriter(File.Open(sfd.FileName, FileMode.Create))) {
+
+                        foreach (Pair item in compressed) {
+
+
+                            writer.Write(item.lenght);
+                            writer.Write(item.start_index);
+                            writer.Write(item.letter);
+                        }
+
+                      
                     }
+                    
                 }
                 catch (Exception ex)
                 {
@@ -154,21 +169,51 @@ namespace LZ77
         private void decompress_Click(object sender, EventArgs e)
         {
             LZ77 lzde = new LZ77();
-            byte[] decompressed = lzde.Decompress(inputFile);
+
+            using (BinaryReader reader = new BinaryReader(File.Open(ofd.FileName, FileMode.Open))) {
+
+
+
+
+                // 2.
+                // Position and length variables.
+                int pos = 0;
+                // 2A.
+                // Use BaseStream.
+                int length = (int)reader.BaseStream.Length;
+
+                while (pos < length) {
+                    // 3.
+                    // Read integer.
+                    reader_list.Add(new Pair(reader.ReadByte(), reader.ReadByte(), reader.ReadChar()));
+
+                    // 4.
+                    // Advance our position variable.
+                    pos += sizeof(byte);
+                    pos += sizeof(byte);
+                    pos += sizeof(char);
+
+                }
+
+                reader_list.Add(new Pair(reader.ReadByte(), reader.ReadByte(), reader.ReadChar()));
+
+            }
+
+
+            //byte[] decompressed = 
+            string d = lzde.Decompress(reader_list);
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.Filter = "lz77 files (*.lz77)|*.lz77|All files (*.*)|*.*|User input type (*" + inputExt + ")|*" + inputExt + "";
             if (inputExt != "")
             {
                 sfd.FilterIndex = 2;
             }
+
             if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 try
                 {
-                    using (var fs = new FileStream(sfd.FileName, FileMode.Create, FileAccess.Write))
-                    {
-                        fs.Write(decompressed, 0, decompressed.Length);
-                    }
+                    File.WriteAllText(sfd.FileName, d);
                 }
                 catch (Exception ex)
                 {

@@ -4,245 +4,258 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO.Compression;
+using System.Collections;
 
 namespace LZ77
 {
-    class LZ77
-    {
-        private byte _referencePrefix;
-        private int _referenceIntBase;
-        private int _referenceIntFloorCode;
-        private int _referenceIntCeilCode;
-        private int _maxStringDistance;
-        private int _minStringLength;
-        private int _maxStringLength;
-        private int _defaultWindowLength;
-        private int _maxWindowLength;
+    class Matcher {
 
-        public LZ77()
-        {
-            _referencePrefix = (byte)'`';
-            _referenceIntBase = 96;
-            _referenceIntFloorCode = 32;
-            _referenceIntCeilCode = 128;
-            _maxStringDistance = (int)Math.Pow(_referenceIntBase, 2) - 1;
-            _minStringLength = 5;
-            _maxStringLength = (int)Math.Pow(_referenceIntBase, 1) - 1 + _minStringLength;
-            _defaultWindowLength = (int)CompressionLevel.Fastest;
-            _maxWindowLength = _maxStringDistance + _minStringLength;
-        }
-        public byte[] Compress(byte[] data, int windowLength)
-        {
-            if (windowLength == -1)
-            {
-                windowLength = _defaultWindowLength;
-            }
+        public int lenght;
+        public int start_index;
 
-            if (windowLength > _maxWindowLength)
-            {
-                throw new ArgumentException("Window length is too large.");
-            }
+        public Matcher() {
 
-            List<byte> compressed = new List<byte>();
-
-            int pos = 0;
-            int lastPos = data.Length - _minStringLength;
-
-            while (pos < lastPos)
-            {
-                //Stopwatch w = Stopwatch.StartNew();
-
-                int searchStart = Math.Max(pos - windowLength, 0);
-                int matchLength = _minStringLength;
-                bool foundMatch = false;
-                int bestMatchDistance = _maxStringDistance;
-                int bestMatchLength = 0;
-                List<byte> newCompressed = new List<byte>();
-
-                while ((searchStart + matchLength) < pos)
-                {
-                    int sourceWindowEnd = Math.Min(searchStart + matchLength, data.Length);
-                    int targetWindowEnd = Math.Min(pos + matchLength, data.Length);
-
-                    int m1Length = sourceWindowEnd - searchStart;
-                    int m2Length = targetWindowEnd - pos;
-
-                    byte[] m1 = new byte[m1Length];
-                    byte[] m2 = new byte[m2Length];
-
-                    Array.Copy(data, searchStart, m1, 0, m1Length);
-                    Array.Copy(data, pos, m2, 0, m2Length);
-
-                    bool isValidMatch = m1.SequenceEqual(m2) && matchLength < _maxStringLength;
-
-                    if (isValidMatch)
-                    {
-                        matchLength++;
-                        foundMatch = true;
-                    }
-                    else
-                    {
-                        int realMatchLength = matchLength - 1;
-
-                        if (foundMatch && (realMatchLength > bestMatchLength))
-                        {
-                            bestMatchDistance = pos - searchStart - realMatchLength;
-                            bestMatchLength = realMatchLength;
-                        }
-
-                        matchLength = _minStringLength;
-                        searchStart++;
-                        foundMatch = false;
-                    }
-                }
-
-                if (bestMatchLength != 0)
-                {
-                    newCompressed.Add(_referencePrefix);
-                    newCompressed.AddRange(EncodeReferenceInt(bestMatchDistance, 2));
-                    newCompressed.AddRange(EncodeReferenceLength(bestMatchLength));
-
-                    pos += bestMatchLength;
-                }
-                else
-                {
-                    if (data[pos] != _referencePrefix)
-                    {
-                        newCompressed = new List<byte>(new byte[] { data[pos] });
-                    }
-                    else
-                    {
-                        newCompressed = new List<byte>(new byte[] { _referencePrefix, _referencePrefix });
-                    }
-
-                    pos++;
-                }
-
-                compressed.AddRange(newCompressed);
-
-                //Console.WriteLine(w.ElapsedMilliseconds);
-            }
-
-            var lasts = data.Skip(pos).Take(data.Length - pos);
-            lasts
-                .Where(x => x == _referencePrefix)
-                .ToList()
-                .ForEach
-                (
-                    x =>
-                        compressed
-                            .AddRange
-                            (
-                                new byte[]
-                                {
-                                _referencePrefix,
-                                _referencePrefix
-                                }
-                            )
-                );
-
-            return compressed.ToArray();
+            this.lenght = 1;
         }
 
-        public byte[] Decompress(byte[] data)
-        {
-            List<byte> decompressed = new List<byte>();
-            int pos = 0;
+        public Matcher(int start_index) {
 
-            while (pos < data.Length)
-            {
-                byte currentByte = data[pos];
-
-                if (currentByte != _referencePrefix)
-                {
-                    decompressed.Add(currentByte);
-                    pos++;
-                }
-                else
-                {
-                    byte nextChar = data[pos + 1];
-
-                    if (nextChar != _referencePrefix)
-                    {
-                        int distance = DecodeReferenceInt(data.Skip(pos + 1).Take(2).ToList(), 2);
-                        int length = DecodeReferenceLength(data.Skip(pos + 3).Take(1).ToList());
-                        int start = decompressed.Count - distance - length;
-                        int end = start + length;
-
-                        var slice = decompressed.Skip(start).Take(end - start).ToList();
-                        decompressed.AddRange(slice);
-                        pos += _minStringLength - 1;
-                    }
-                    else
-                    {
-                        decompressed.Add((byte)_referencePrefix);
-                        pos += 2;
-                    }
-                }
-            }
-
-            return decompressed.ToArray();
-        }
-        private IList<byte> EncodeReferenceInt(int value, int width)
-        {
-            if ((value >= 0) && (value < (Math.Pow(_referenceIntBase, width) - 1)))
-            {
-                IList<byte> encoded = new List<byte>();
-
-                while (value > 0)
-                {
-                    byte b = (byte)((value % _referenceIntBase) + _referenceIntFloorCode);
-                    encoded.Insert(0, b);
-                    value = (int)Math.Floor((double)value / _referenceIntBase);
-                }
-
-                int missingLength = width - encoded.Count;
-
-                for (int i = 0; i < missingLength; i++)
-                {
-                    byte b = (byte)_referenceIntFloorCode;
-                    encoded.Insert(0, b);
-                }
-
-                return encoded;
-            }
-            else
-            {
-                throw new ArgumentException(string.Format("Reference int out of range: {0} (width = {1})", value, width));
-            }
-        }
-
-        private IList<byte> EncodeReferenceLength(int length)
-        {
-            return EncodeReferenceInt(length - _minStringLength, 1);
-        }
-
-        private int DecodeReferenceInt(IList<byte> data, int width)
-        {
-            int value = 0;
-
-            for (int i = 0; i < width; i++)
-            {
-                value *= _referenceIntBase;
-
-                int charCode = (int)data[i];
-
-                if ((charCode >= _referenceIntFloorCode) && (charCode <= _referenceIntCeilCode))
-                {
-                    value += charCode - _referenceIntFloorCode;
-                }
-                else
-                {
-                    throw new ArgumentException("Invalid char code in reference int: " + charCode);
-                }
-            }
-
-            return value;
-        }
-
-        private int DecodeReferenceLength(IList<byte> data)
-        {
-            return DecodeReferenceInt(data, 1) + _minStringLength;
+            this.start_index = start_index;
+            this.lenght = 1;
         }
     }
-}
+
+    class Pair {
+
+        public byte lenght;
+        public byte start_index;
+        public char letter;
+
+        public Pair(byte lenght, byte start_index, char letter) {
+
+            this.lenght = lenght;
+            this.start_index = start_index;
+            this.letter = letter;
+        }
+    }
+
+    class LZ77 {
+
+        private List<Pair> output_list;
+
+        public LZ77() {
+
+            output_list = new List<Pair>();
+        }
+
+        public List<Pair> Compress(char[] data, int window_length) {
+
+           // Console.WriteLine(data[0]);
+
+            window_length = 255;
+
+            List<string> db = new List<string>();
+
+            int array_lenght = data.Length;
+            int look_ahead = 0;
+
+            for (int i = 0; i < array_lenght; i++) {
+
+                if (i != 0) {
+
+                    look_ahead = window_length;
+
+                    if (i - look_ahead < 0) {
+
+                        look_ahead = i;
+                    }
+
+                    List <Matcher> match_list= new List<Matcher>();
+
+                    int lctr = 0;
+
+                    for (int j = i - 1; j > i - look_ahead - 1; j--) {
+
+                      //  Console.WriteLine(data[j] + " " + data[i]);
+
+                        if (data[j] == data[i]) {
+
+                            match_list.Add(new Matcher(lctr));
+                        }
+
+                        lctr++;
+                    }
+
+                  //  Console.WriteLine(".....");
+
+
+                    //Console.WriteLine(match_list.Count + "aaa");
+                    if (match_list.Count != 0) {
+
+                        foreach (Matcher item in match_list) {
+
+                            int ctr = 0;
+
+                            for (int n = i - item.start_index; n < i; n++) {
+
+                                ctr++;
+
+                                if (i + ctr < data.Length) {
+
+                                 //   Console.Write(item.start_index);
+                                 //   Console.Write(i);
+                                 //   Console.Write(data[n]);
+                                 //   Console.WriteLine(data[i + ctr]);
+
+                                    if (data[n] == data[i + ctr]) {
+
+
+
+                                        item.lenght++;
+                                    }
+                                    else {
+
+                                        break;
+                                    }
+                                }
+
+                                
+
+
+                            }
+
+                          //  Console.WriteLine("===");
+
+                        }
+
+                        Matcher result = new Matcher();
+                        int counter = 0;
+
+                        foreach (Matcher item in match_list) {
+
+                            
+
+                            if (counter == 0) {
+
+                                result = item;
+                            }
+                            else {
+
+                                
+
+                                if (item.lenght > result.lenght) {
+
+                                    result = item;
+                                }
+                            }
+
+                            counter++;
+                        }
+
+                      //  Console.WriteLine(i +" "+ result.lenght + " " + data.Length);
+                        if (i + result.lenght >= data.Length) {
+                            db.Add("1" + result.start_index + result.lenght);
+
+                            byte result_lenght = (byte)result.lenght;
+                            byte result_start_index = (byte)result.start_index;
+                            Add_pair(result_lenght, result_start_index, '.');
+                        }
+                        else {
+
+                            db.Add("1" + data[i + result.lenght] + result.start_index +  "LLL" + result.lenght);
+
+                            byte result_lenght = (byte)result.lenght;
+                            byte result_start_index = (byte)result.start_index;
+                            Add_pair(result_lenght, result_start_index, data[i + result.lenght]);
+
+                        }
+
+                        i = i + result.lenght;
+
+
+                    }
+                    else {
+
+                        db.Add("0" + data[i]);
+
+                        Add_pair(0, 0, data[i]);
+                    }
+                }
+                else {
+
+                    db.Add("0" + data[i]);
+
+                    Add_pair(0, 0, data[i]);
+
+
+                }
+
+
+
+
+            }
+
+            foreach (string item in db) {
+
+                //Console.WriteLine(item);
+            }
+
+          //  Console.WriteLine(output_list[0].letter);
+
+            return output_list;            
+        }
+
+        private void Add_pair(byte lenght, byte start_index, char letter) {
+
+            output_list.Add(new Pair(lenght, start_index, letter));
+        }
+
+        public string Decompress(List<Pair> input_list) {
+
+            List<Char> decoded = new List<char>();
+
+            int counter = 0;
+
+            foreach (Pair item in input_list) {
+
+                //Console.WriteLine(item.lenght + " " + item.start_index + " " +  item.letter);
+
+                if (item.lenght == 0) {
+
+                    decoded.Add(item.letter);
+
+                    counter++;
+                }
+                else {
+
+                    int counter_temp = counter;
+
+                    for (int i = counter_temp - item.start_index - 1; i < counter_temp - item.start_index + item.lenght - 1; i++) {
+
+                    //    Console.WriteLine("f " + decoded[i]);
+
+                        decoded.Add(decoded[i]);
+
+                        counter++;
+
+                    }
+
+                  //  Console.WriteLine("p " + item.letter);
+
+                    decoded.Add(item.letter);
+
+                    counter++;
+                }
+
+             
+            }
+
+            foreach (char item in decoded) {
+
+               // Console.Write(item);
+            }
+
+            return new string(decoded.ToArray());
+        }
+    }
+}   
