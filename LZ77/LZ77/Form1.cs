@@ -21,8 +21,6 @@ namespace LZ77
         int inputSize = 0; // wielkość tablicy bajtów z plikiem wejściowym
         string inputExt = ""; // rozszerzenie pliku wejściowego
         Dictionary<char, double> dictionary; // słownik używany przy liczeniu entropii
-        BackgroundWorker bgw = new BackgroundWorker();
-        int[] windowLengths = { 64, 128, 512, 1024, 2048, 4096, 8192};
 
         public Dictionary<char, double> makeDictionary(string input)
         {
@@ -68,11 +66,7 @@ namespace LZ77
 
             InitializeComponent();
             
-            for(int i = 0; i < windowLengths.Length; i++)
-            {
-                comboBox1.Items.Add(windowLengths[i]);
-            }
-            comboBox1.SelectedIndex = 4;
+        
 
             //czwarta zakładka
             textBox2.Text = "Lempel-Ziv 77, skracane zwykle do LZ77 (algorytm LZ77) – metoda strumieniowej słownikowej kompresji danych. Metoda LZ77 wykorzystuje fakt, że w danych powtarzają się ciągi bajtów (np. w tekstach naturalnych będą to słowa, frazy lub całe zdania) – kompresja polega na zastępowaniu powtórzonych ciągów o wiele krótszymi liczbami wskazującymi, kiedy wcześniej wystąpił ciąg i z ilu bajtów się składał; z punktu widzenia człowieka jest to informacja postaci \"taki sam ciąg o długości 15 znaków wystąpił 213 znaków wcześniej\". Algorytm LZ77 jest wolny od wszelkich patentów, co w dużej mierze przyczyniło się do jego popularności i szerokiego rozpowszechnienia. Doczekał się wielu ulepszeń i modyfikacji, dających lepsze współczynniki kompresji albo dużą szybkość działania.Na LZ77 opiera się m.in. algorytm deflate, używany jest również w formatach ZIP, gzip, ARJ, RAR, PKZIP, a także PNG. Algorytm został opracowany w 1977 przez Abrahama Lempela i Jacoba Ziv i opisany w artykule A universal algorithm for sequential data compression opublikowanym w IEEE Transactions on Information Theory(str. 8 - 19). Rok później autorzy opublikowali ulepszoną wersję metody, znaną pod nazwą LZ78. Organizacja IEEE uznała algorytm Lempel - Ziv za kamień milowy w rozwoju elektroniki i informatyki. ";
@@ -104,122 +98,108 @@ namespace LZ77
                 dataGridView1.DataSource = (from data in dictionary orderby data.Value select new { data.Key, data.Value }).ToList();
             }
         }
-        void bgw_DoWork(object sender, DoWorkEventArgs e)
-        {
-            int total = 100; //some number (this is your variable to change)!!
-
-            for (int i = 0; i <= total; i++) //some number (total)
-            {
-                System.Threading.Thread.Sleep(100);
-                int percents = (i * 100) / total;
-                bgw.ReportProgress(percents, i);
-                //2 arguments:
-                //1. procenteges (from 0 t0 100) - i do a calcumation 
-                //2. some current value!
-            }
-        }
-        void bgw_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            progressBar1.Value = e.ProgressPercentage;
-        }
-
-        void bgw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            //do the code when bgv completes its work
-        }
+        
         private void compress_Click(object sender, EventArgs e)
         {
-            List<Pair> compressed;
-            LZ77 lz = new LZ77();
-
-            char[] textChar = inputText.ToCharArray();
-
-            compressed = lz.Compress(inputText.ToCharArray(), Int32.Parse(comboBox1.Text));
-
-            Console.WriteLine(compressed.Count);
-            SaveFileDialog sfd = new SaveFileDialog();
-            sfd.Filter = "lz77 files (*.lz77)|*.lz77";
-            if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if(inputFile == null)
             {
-                try
+                MessageBox.Show("Wprowadź plik do kompresji.", "Niewłaściwy plik", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+            else
+            {
+                List<Pair> compressed;
+                LZ77 lz = new LZ77();
+                char[] textChar = inputText.ToCharArray();
+                compressed = lz.Compress(inputText.ToCharArray());
+                Console.WriteLine(compressed.Count);
+                SaveFileDialog sfd = new SaveFileDialog();
+                sfd.Filter = "lz77 files (*.lz77)|*.lz77";
+                if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-
-                    using (BinaryWriter writer = new BinaryWriter(File.Open(sfd.FileName, FileMode.Create))) {
-
-                        foreach (Pair item in compressed) {
-
-
-                            writer.Write(item.lenght);
-                            writer.Write(item.start_index);
-                            writer.Write(item.letter);
+                    try
+                    {
+                        using (BinaryWriter writer = new BinaryWriter(File.Open(sfd.FileName, FileMode.Create)))
+                        {
+                            foreach (Pair item in compressed)
+                            {
+                                writer.Write(item.lenght);
+                                writer.Write(item.start_index);
+                                writer.Write(item.letter);
+                            }
                         }
-
-                      
                     }
-                    
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Exception caught in process: {0}", ex);
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Exception caught in process: {0}", ex);
+                    }
                 }
             }
+            
             
         }
 
         private void decompress_Click(object sender, EventArgs e)
         {
-            LZ77 lzde = new LZ77();
+            if (inputFile == null)
+            {
+                MessageBox.Show("Wprowadź plik do dekompresji.", "Niewłaściwy plik", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+            else
+            {
+                LZ77 lzde = new LZ77();
 
-            using (BinaryReader reader = new BinaryReader(File.Open(ofd.FileName, FileMode.Open))) {
+                using (BinaryReader reader = new BinaryReader(File.Open(ofd.FileName, FileMode.Open)))
+                {
 
 
 
 
-                // 2.
-                // Position and length variables.
-                int pos = 0;
-                // 2A.
-                // Use BaseStream.
-                int length = (int)reader.BaseStream.Length;
+                    // 2.
+                    // Position and length variables.
+                    int pos = 0;
+                    // 2A.
+                    // Use BaseStream.
+                    int length = (int)reader.BaseStream.Length;
 
-                while (pos < length) {
-                    // 3.
-                    // Read integer.
+                    while (pos < length)
+                    {
+                        // 3.
+                        // Read integer.
+                        reader_list.Add(new Pair(reader.ReadByte(), reader.ReadByte(), reader.ReadChar()));
+
+                        // 4.
+                        // Advance our position variable.
+                        pos += sizeof(byte);
+                        pos += sizeof(byte);
+                        pos += sizeof(char);
+
+                    }
+
                     reader_list.Add(new Pair(reader.ReadByte(), reader.ReadByte(), reader.ReadChar()));
 
-                    // 4.
-                    // Advance our position variable.
-                    pos += sizeof(byte);
-                    pos += sizeof(byte);
-                    pos += sizeof(char);
-
                 }
 
-                reader_list.Add(new Pair(reader.ReadByte(), reader.ReadByte(), reader.ReadChar()));
-
-            }
-
-
-            //byte[] decompressed = 
-            string d = lzde.Decompress(reader_list);
-            SaveFileDialog sfd = new SaveFileDialog();
-            sfd.Filter = "lz77 files (*.lz77)|*.lz77|All files (*.*)|*.*|User input type (*" + inputExt + ")|*" + inputExt + "";
-            if (inputExt != "")
-            {
-                sfd.FilterIndex = 2;
-            }
-
-            if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                try
+                string d = lzde.Decompress(reader_list);
+                SaveFileDialog sfd = new SaveFileDialog();
+                sfd.Filter = "lz77 files (*.lz77)|*.lz77|All files (*.*)|*.*|User input type (*" + inputExt + ")|*" + inputExt + "";
+                if (inputExt != "")
                 {
-                    File.WriteAllText(sfd.FileName, d);
+                    sfd.FilterIndex = 2;
                 }
-                catch (Exception ex)
+
+                if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    Console.WriteLine("Exception caught in process: {0}", ex);
+                    try
+                    {
+                        File.WriteAllText(sfd.FileName, d);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Exception caught in process: {0}", ex);
+                    }
                 }
             }
+            
             
         }
     }

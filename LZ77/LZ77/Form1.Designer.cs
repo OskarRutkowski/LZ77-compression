@@ -29,40 +29,39 @@
         private void InitializeComponent()
         {
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.button1 = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.compress = new System.Windows.Forms.Button();
-            this.decompress = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.decompress = new System.Windows.Forms.Button();
+            this.compress = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.label2 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.label14 = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
             this.textBox3 = new System.Windows.Forms.TextBox();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.label16 = new System.Windows.Forms.Label();
             this.tabPage4.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.tabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabPage4
@@ -77,10 +76,28 @@
             this.tabPage4.Text = "Podgląd pliku";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(13, 23);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBox1.Size = new System.Drawing.Size(234, 265);
+            this.textBox1.TabIndex = 1;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(10, 7);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(74, 13);
+            this.label7.TabIndex = 0;
+            this.label7.Text = "Podgląd pliku:";
+            // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.progressBar1);
-            this.tabPage1.Controls.Add(this.comboBox1);
+            this.tabPage1.Controls.Add(this.label16);
             this.tabPage1.Controls.Add(this.label2);
             this.tabPage1.Controls.Add(this.label6);
             this.tabPage1.Controls.Add(this.label5);
@@ -98,62 +115,23 @@
             this.tabPage1.Text = "Kompresja";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // button1
+            // label2
             // 
-            this.button1.Location = new System.Drawing.Point(9, 6);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Wczytaj plik";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(12, 99);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(81, 13);
+            this.label2.TabIndex = 11;
+            this.label2.Text = "Wielkość okna:";
             // 
-            // label1
+            // label6
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(105, 11);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(68, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Nazwa pliku.";
-            // 
-            // compress
-            // 
-            this.compress.Location = new System.Drawing.Point(9, 206);
-            this.compress.Name = "compress";
-            this.compress.Size = new System.Drawing.Size(75, 23);
-            this.compress.TabIndex = 2;
-            this.compress.Text = "Kompresuj";
-            this.compress.UseVisualStyleBackColor = true;
-            this.compress.Click += new System.EventHandler(this.compress_Click);
-            // 
-            // decompress
-            // 
-            this.decompress.Location = new System.Drawing.Point(175, 206);
-            this.decompress.Name = "decompress";
-            this.decompress.Size = new System.Drawing.Size(84, 23);
-            this.decompress.TabIndex = 3;
-            this.decompress.Text = "Dekompresuj";
-            this.decompress.UseVisualStyleBackColor = true;
-            this.decompress.Click += new System.EventHandler(this.decompress_Click);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(9, 36);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(72, 13);
-            this.label3.TabIndex = 5;
-            this.label3.Text = "Ilość znaków:";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(9, 59);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(112, 13);
-            this.label4.TabIndex = 6;
-            this.label4.Text = "Ilość różnych znaków:";
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(127, 59);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(69, 13);
+            this.label6.TabIndex = 8;
+            this.label6.Text = "Różne znaki.";
             // 
             // label5
             // 
@@ -164,14 +142,62 @@
             this.label5.TabIndex = 7;
             this.label5.Text = "Ilość znaków.";
             // 
-            // label6
+            // label4
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(127, 59);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(69, 13);
-            this.label6.TabIndex = 8;
-            this.label6.Text = "Różne znaki.";
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(9, 59);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(112, 13);
+            this.label4.TabIndex = 6;
+            this.label4.Text = "Ilość różnych znaków:";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(9, 36);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(72, 13);
+            this.label3.TabIndex = 5;
+            this.label3.Text = "Ilość znaków:";
+            // 
+            // decompress
+            // 
+            this.decompress.Location = new System.Drawing.Point(175, 279);
+            this.decompress.Name = "decompress";
+            this.decompress.Size = new System.Drawing.Size(84, 23);
+            this.decompress.TabIndex = 3;
+            this.decompress.Text = "Dekompresuj";
+            this.decompress.UseVisualStyleBackColor = true;
+            this.decompress.Click += new System.EventHandler(this.decompress_Click);
+            // 
+            // compress
+            // 
+            this.compress.Location = new System.Drawing.Point(9, 279);
+            this.compress.Name = "compress";
+            this.compress.Size = new System.Drawing.Size(75, 23);
+            this.compress.TabIndex = 2;
+            this.compress.Text = "Kompresuj";
+            this.compress.UseVisualStyleBackColor = true;
+            this.compress.Click += new System.EventHandler(this.compress_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(105, 11);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(68, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Nazwa pliku.";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(9, 6);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 0;
+            this.button1.Text = "Wczytaj plik";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // tabControl1
             // 
@@ -202,6 +228,68 @@
             this.tabPage2.Text = "Częstość znaków";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(87, 281);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(49, 13);
+            this.label13.TabIndex = 12;
+            this.label13.Text = "Entropia.";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(9, 281);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(49, 13);
+            this.label12.TabIndex = 11;
+            this.label12.Text = "Entropia:";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(128, 23);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(69, 13);
+            this.label11.TabIndex = 10;
+            this.label11.Text = "Różne znaki.";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(10, 23);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(112, 13);
+            this.label10.TabIndex = 9;
+            this.label10.Text = "Ilość różnych znaków:";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(87, 3);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(72, 13);
+            this.label9.TabIndex = 8;
+            this.label9.Text = "Ilość znaków.";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(9, 3);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(72, 13);
+            this.label8.TabIndex = 6;
+            this.label8.Text = "Ilość znaków:";
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Location = new System.Drawing.Point(6, 49);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.Size = new System.Drawing.Size(250, 218);
+            this.dataGridView1.TabIndex = 0;
+            // 
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.textBox3);
@@ -216,103 +304,33 @@
             this.tabPage3.Text = "LZ77";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
-            // label2
+            // textBox3
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 99);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(78, 13);
-            this.label2.TabIndex = 11;
-            this.label2.Text = "Wielkość okna";
+            this.textBox3.Location = new System.Drawing.Point(15, 174);
+            this.textBox3.Multiline = true;
+            this.textBox3.Name = "textBox3";
+            this.textBox3.ReadOnly = true;
+            this.textBox3.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBox3.Size = new System.Drawing.Size(234, 123);
+            this.textBox3.TabIndex = 5;
             // 
-            // comboBox1
+            // label15
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(96, 96);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(59, 21);
-            this.comboBox1.TabIndex = 13;
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(12, 158);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(92, 13);
+            this.label15.TabIndex = 4;
+            this.label15.Text = "Zasada działania:";
             // 
-            // label7
+            // label14
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(10, 7);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(74, 13);
-            this.label7.TabIndex = 0;
-            this.label7.Text = "Podgląd pliku:";
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(13, 23);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox1.Size = new System.Drawing.Size(234, 265);
-            this.textBox1.TabIndex = 1;
-            // 
-            // dataGridView1
-            // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(6, 49);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(250, 218);
-            this.dataGridView1.TabIndex = 0;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(9, 3);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(72, 13);
-            this.label8.TabIndex = 6;
-            this.label8.Text = "Ilość znaków:";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(87, 3);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(72, 13);
-            this.label9.TabIndex = 8;
-            this.label9.Text = "Ilość znaków.";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(10, 23);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(112, 13);
-            this.label10.TabIndex = 9;
-            this.label10.Text = "Ilość różnych znaków:";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(128, 23);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(69, 13);
-            this.label11.TabIndex = 10;
-            this.label11.Text = "Różne znaki.";
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(9, 281);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(49, 13);
-            this.label12.TabIndex = 11;
-            this.label12.Text = "Entropia:";
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(87, 281);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(49, 13);
-            this.label13.TabIndex = 12;
-            this.label13.Text = "Entropia.";
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(12, 6);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(72, 13);
+            this.label14.TabIndex = 3;
+            this.label14.Text = "LZ77 ogólnie:";
             // 
             // textBox2
             // 
@@ -324,41 +342,14 @@
             this.textBox2.Size = new System.Drawing.Size(234, 123);
             this.textBox2.TabIndex = 2;
             // 
-            // label14
+            // label16
             // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(12, 6);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(72, 13);
-            this.label14.TabIndex = 3;
-            this.label14.Text = "LZ77 ogólnie:";
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(12, 158);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(92, 13);
-            this.label15.TabIndex = 4;
-            this.label15.Text = "Zasada działania:";
-            // 
-            // textBox3
-            // 
-            this.textBox3.Location = new System.Drawing.Point(15, 174);
-            this.textBox3.Multiline = true;
-            this.textBox3.Name = "textBox3";
-            this.textBox3.ReadOnly = true;
-            this.textBox3.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox3.Size = new System.Drawing.Size(234, 123);
-            this.textBox3.TabIndex = 5;
-            // 
-            // progressBar1
-            // 
-            this.progressBar1.Location = new System.Drawing.Point(3, 282);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(256, 23);
-            this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-            this.progressBar1.TabIndex = 14;
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(108, 99);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(34, 13);
+            this.label16.TabIndex = 15;
+            this.label16.Text = "255 b";
             // 
             // Form1
             // 
@@ -375,9 +366,9 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -398,7 +389,6 @@
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.DataGridView dataGridView1;
@@ -412,7 +402,7 @@
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.Label label16;
     }
 }
 
