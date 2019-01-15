@@ -27,8 +27,8 @@ namespace LZ77
 
     class Pair {
 
-        public byte lenght;
-        public byte start_index;
+        public short lenght;
+        public short start_index;
         public char letter;
 
         public Pair(byte lenght, byte start_index, char letter) {

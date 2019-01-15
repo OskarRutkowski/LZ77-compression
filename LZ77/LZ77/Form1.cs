@@ -18,6 +18,7 @@ namespace LZ77
 
         byte[] inputFile; //tablica bajtów z plikiem wejściowym
         string inputText = "";
+        string fileName = "";
         int inputSize = 0; // wielkość tablicy bajtów z plikiem wejściowym
         string inputExt = ""; // rozszerzenie pliku wejściowego
         Dictionary<char, double> dictionary; // słownik używany przy liczeniu entropii
@@ -91,6 +92,7 @@ namespace LZ77
                
                 //pierwsza zakładka
                 label1.Text = ofd.SafeFileName;
+                fileName = ofd.SafeFileName;
                 label5.Text = inputSize.ToString();
                 //druga zakładka
                 textBox1.Text = str;
@@ -110,7 +112,13 @@ namespace LZ77
                 List<Pair> compressed;
                 LZ77 lz = new LZ77();
                 char[] textChar = inputText.ToCharArray();
+                /////////////////////////////////////////////////////count time
+                var watch = System.Diagnostics.Stopwatch.StartNew();
                 compressed = lz.Compress(inputText.ToCharArray());
+                watch.Stop();
+                var elapsedMs = watch.ElapsedMilliseconds;
+                Console.WriteLine("ompress Time in ms: "+ elapsedMs + "ms for "+fileName);
+                /////////////////////////////////////////////////////
                 Console.WriteLine(compressed.Count);
                 SaveFileDialog sfd = new SaveFileDialog();
                 sfd.Filter = "lz77 files (*.lz77)|*.lz77";
@@ -178,8 +186,13 @@ namespace LZ77
                     reader_list.Add(new Pair(reader.ReadByte(), reader.ReadByte(), reader.ReadChar()));
 
                 }
-
+                /////////////////////////////////////////count time
+                var watch = System.Diagnostics.Stopwatch.StartNew();
                 string d = lzde.Decompress(reader_list);
+                watch.Stop();
+                var elapsedMs = watch.ElapsedMilliseconds;
+                Console.WriteLine("Decompress Time in ms: " + elapsedMs + "ms for " + fileName);
+                /////////////////////////////////////////
                 SaveFileDialog sfd = new SaveFileDialog();
                 sfd.Filter = "lz77 files (*.lz77)|*.lz77|All files (*.*)|*.*|User input type (*" + inputExt + ")|*" + inputExt + "";
                 if (inputExt != "")
